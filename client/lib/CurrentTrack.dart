@@ -1,6 +1,6 @@
 import 'package:client/RequestHandler.dart';
 import 'package:flutter/material.dart';
-import 'package:marquee/marquee.dart';
+import 'package:animated_overflow/animated_overflow.dart';
 
 class TrackState {
   double length = 1000;
@@ -15,7 +15,7 @@ class TrackState {
     state.status = json['state'];
     state.isPlaying = false;
     if (state.status != "UNKNOWN") {
-      state.isPlaying = json['state'] != 'IDLE';
+      state.isPlaying = json['state'] != 'IDLE' && json['state'] != 'PAUSED';
       state.length = json['duration'];
       state.position = json['time'];
       state.name = json['track'];
@@ -83,14 +83,12 @@ class _CurrentTrackDisplayState extends State<CurrentTrackDisplay>
                         if (widget.state.isPlaying) {
                           postRequest("/player/pause", {}).then((value) {
                             setState(() {
-                              widget.state.isPlaying = false;
                               _animationController.reverse();
                             });
                           });
                         } else {
                           postRequest("/player/play", {}).then((value) {
                             setState(() {
-                              widget.state.isPlaying = true;
                               _animationController.forward();
                             });
                           });
@@ -109,9 +107,15 @@ class _CurrentTrackDisplayState extends State<CurrentTrackDisplay>
                       size: 50,
                     ),
                   ),
-                  Text(widget.state.name,
-                      style: const TextStyle(
-                          fontSize: 25, fontWeight: FontWeight.bold)),
+                  AnimatedOverflow(
+                    animatedOverflowDirection:
+                        AnimatedOverflowDirection.HORIZONTAL,
+                    maxWidth: 190,
+                    speed: 50,
+                    child: Text(widget.state.name,
+                        style: const TextStyle(
+                            fontSize: 25, fontWeight: FontWeight.bold)),
+                  ),
                 ]),
                 Slider(
                     value: widget.state.position,

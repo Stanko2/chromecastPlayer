@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:http/http.dart';
 
-String baseUrl = 'http://192.168.0.161:5000';
+String baseUrl = 'http://192.168.0.43/cdcka';
 
 Future<dynamic> getRequest(String url) async {
   Response res = await get(Uri.parse(baseUrl + url));

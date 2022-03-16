@@ -1,3 +1,4 @@
+import 'package:animated_overflow/animated_overflow.dart';
 import 'package:client/CurrentTrack.dart';
 import 'package:client/RequestHandler.dart';
 import 'package:flutter/material.dart';
@@ -22,13 +23,14 @@ class _HomePageState extends State<HomePage> {
               (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
             if (snapshot.hasData) {
               print(snapshot.data);
-              return GridView.count(
-                  crossAxisCount: 2,
-                  children: snapshot.data!
-                      .map((e) => TrackEntry(
-                            title: e,
-                          ))
-                      .toList());
+              return SingleChildScrollView(
+                child: Column(
+                    children: snapshot.data!
+                        .map((e) => TrackEntry(
+                              title: e,
+                            ))
+                        .toList()),
+              );
             } else if (snapshot.hasError) {
               return Text(snapshot.error.toString());
             } else {
@@ -87,24 +89,25 @@ class TrackEntry extends StatelessWidget {
           child: Container(
             decoration: const BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(10))),
-            child: Stack(
-              alignment: Alignment.center,
+            child: Row(
               children: [
-                Positioned(
-                    child: Image.network("$baseUrl/tracks/$title/thumbnail",
-                        errorBuilder: (context, error, stackTrace) {
+                Image.network("$baseUrl/tracks/$title/thumbnail",
+                    errorBuilder: (context, error, stackTrace) {
                   return const Icon(
                     Icons.music_note,
                     size: 100,
                   );
-                })),
-                Positioned(
+                }),
+                AnimatedOverflow(
+                  animatedOverflowDirection:
+                      AnimatedOverflowDirection.HORIZONTAL,
+                  maxWidth: 400,
+                  speed: 50,
                   child: Text(
                     title,
                     style: const TextStyle(
                         fontSize: 30, fontWeight: FontWeight.w400),
                   ),
-                  bottom: 0,
                 )
               ],
             ),
