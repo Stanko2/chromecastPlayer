@@ -1,5 +1,5 @@
+import json
 from flask import Blueprint, jsonify, request
-from itsdangerous import json
 from Chromecast import chromecast
 
 player_blueprint = Blueprint("Player", __name__, url_prefix="/player")
