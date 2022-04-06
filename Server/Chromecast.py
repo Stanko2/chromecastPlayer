@@ -7,7 +7,20 @@ import os
 class Chromecast():
     def __init__(self):
         self.connect()
+        self.queue = []
         pass
+
+    def updateQueue(self):
+        while True:
+            if self.getStatus()["state"] != "PLAYING":
+                time.sleep(3)
+                continue
+            if len(self.queue) > 0:
+                self.mc.play_media(
+                    self.queue[0]["url"], 'video/mp4', title=self.queue[0]["title"])
+                self.mc.play()
+                self.queue.pop(0)
+            time.sleep(3)
 
     def connect(self):
         try:
@@ -23,8 +36,12 @@ class Chromecast():
             self.connect()
 
     def play(self, url="", enqueue=False, title=None):
+        if enqueue:
+            self.queue.append({"url": url, "title": title})
+            return
+        self.queue.clear()
         if url != "":
-            self.mc.play_media(url, 'video/mp4', enqueue=enqueue, title=title)
+            self.mc.play_media(url, 'video/mp4', title=title)
         self.mc.play()
 
     def pause(self):

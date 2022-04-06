@@ -91,17 +91,24 @@ class TrackEntry extends StatelessWidget {
                 borderRadius: BorderRadius.all(Radius.circular(10))),
             child: Row(
               children: [
-                Image.network("$baseUrl/tracks/$title/thumbnail",
-                    errorBuilder: (context, error, stackTrace) {
-                  return const Icon(
-                    Icons.music_note,
-                    size: 100,
-                  );
-                }),
+                Container(
+                  width: 100,
+                  height: 100,
+                  padding: const EdgeInsets.all(10),
+                  decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(10))),
+                  child: Image.network("$baseUrl/tracks/$title/thumbnail",
+                      errorBuilder: (context, error, stackTrace) {
+                    return const Icon(
+                      Icons.music_note,
+                      size: 100,
+                    );
+                  }),
+                ),
                 AnimatedOverflow(
                   animatedOverflowDirection:
                       AnimatedOverflowDirection.HORIZONTAL,
-                  maxWidth: 400,
+                  maxWidth: 250,
                   speed: 50,
                   child: Text(
                     title,
