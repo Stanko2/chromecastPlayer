@@ -2,12 +2,16 @@ import os
 import pychromecast
 import time
 import os
+import threading
 
 
 class Chromecast():
     def __init__(self):
         self.connect()
         self.queue = []
+        self.thread = threading.Thread(target=self.updateQueue)
+        self.thread.setDaemon(True)
+        self.thread.start()
         pass
 
     def updateQueue(self):
